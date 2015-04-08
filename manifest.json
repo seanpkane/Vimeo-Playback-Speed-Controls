@@ -1,11 +1,11 @@
 {
-	"name": "Vimeo repeat & speed",
-	"description": "Repeat & Speed buttons for Vimeo HTML5 video",
+	"name": "Playback Speed for Embedded Vimeo Videos",
+	"description": "Increase playback speed for embedded Vimeo videos (adapted from rudiedirkx/Vimeo-repeat)",
 
 	"content_scripts": [ {
 		"all_frames": true,
 		"js": [ "vimeo.js" ],
-		"matches": ["http://*/*", "https://*/*", "ftp://*/*", "file:///*"],
+		"matches": ["http://*/*", "https://*/*", "file:///*"],
 		"run_at": "document_end"
 	} ],
 
@@ -13,6 +13,6 @@
 		"128": "vimeo128.png",
 		"48": "vimeo48.png"
 	},
-	"version": "1.5",
+	"version": "1.0",
 	"manifest_version": 2
 }

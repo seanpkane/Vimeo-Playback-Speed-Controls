@@ -32,33 +32,6 @@ function createXButton($box, onClick) {
 	return $button;
 }
 
-function createRepeatButton(video) {
-	var $box = document.createElement('div');
-	$box.className = 'box';
-
-	var html = '';
-	html += '<style>';
-	html += 'html .player .repeat-button { color: white; font-weight: bold; }\n';
-	html += 'html .player .repeat-button.on { background-color: rgb(0, 173, 239); }\n';
-	html += 'html .player .repeat-button.on:active { background-color: rgb(0, 147, 203); }\n';
-	html += '</style>';
-	html += '<label class="rounded-box repeat-label invisible hidden" role="presentation"><span>Repeat</span></label>';
-	html += '<button title="Click to toggle." tabindex="50" class="repeat-button rounded-box" aria-label="Repeat">REP&#8203;EAT</button>';
-	$box.innerHTML = html;
-
-	var $button = createXButton($box, function(e) {
-		var repeating = this.classList.toggle('on');
-		if ( repeating ) {
-			video.addEventListener('timeupdate', onTimeUpdate);
-		}
-		else {
-			video.removeEventListener('timeupdate', onTimeUpdate);
-		}
-	});
-
-	return $box;
-}
-
 function createSpeedButton(video) {
 	var $box = document.createElement('div');
 	$box.className = 'box';
@@ -70,54 +43,16 @@ function createSpeedButton(video) {
 	html += 'html .player .speed-button.on:active { background-color: rgb(0, 147, 203); } \n';
 	html += '</style>';
 	html += '<label class="rounded-box speed-label invisible hidden" role="presentation"><span>Playback rate</span></label>';
-	html += '<button title="Mouse scroll to change speed. Click to enter custom speed." tabindex="50" class="speed-button rounded-box" aria-label="Speed">' + video.playbackRate + 'x</button>';
+	html += '<button title="Set playback speed - 1x" tabindex="50" class="speed-button speed-button-x rounded-box" aria-label="Speed" onclick="document.querySelector(\'div.player video\').playbackRate = 1;">1x</button>';
+	html += '<button title="Set playback speed - 1.25x" tabindex="50" class="speed-button speed-button-x rounded-box" aria-label="Speed" onclick="document.querySelector(\'div.player video\').playbackRate = 1.25;">1.25x</button>';
+	html += '<button title="Set playback speed - 1.5x" tabindex="50" class="speed-button speed-button-x rounded-box" aria-label="Speed" onclick="document.querySelector(\'div.player video\').playbackRate = 1.5;">1.5x</button>';
+	html += '<button title="Set playback speed - 1.75x" tabindex="50" class="speed-button speed-button-x rounded-box" aria-label="Speed" onclick="document.querySelector(\'div.player video\').playbackRate = 1.75;">1.75x</button>';
+	html += '<button title="Set playback speed - 2x" tabindex="50" class="speed-button speed-button-x rounded-box" aria-label="Speed" onclick="document.querySelector(\'div.player video\').playbackRate = 2;">2x</button>';
+
 	$box.innerHTML = html;
-
-	function setSpeed(speed) {
-		video.playbackRate = speed;
-		$button.textContent = (Math.round(speed * 100) / 100) + 'x';
-
-		if ( video.playbackRate == 1 ) {
-			$button.classList.remove('on');
-		}
-		else {
-			$button.classList.add('on');
-		}
-	}
-
-	var $button = createXButton($box, function(e) {
-		var curSpeed = video.playbackRate,
-			newSpeed = prompt('New playback rate:', curSpeed);
-		if ( newSpeed != null && Number(newSpeed) == newSpeed && newSpeed != curSpeed ) {
-			setSpeed(newSpeed);
-		}
-	});
-	$button.onmousewheel = function(e) {
-		var speeds = [0.5, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
-
-		e.preventDefault();
-
-		var direction = e.wheelDelta / Math.abs(e.wheelDelta); // up = 1, down = -1
-		var curSpeed = video.playbackRate,
-			curSpeedIndex = speeds.indexOf(curSpeed);
-
-		// On the scale, so find next by index
-		if ( curSpeedIndex != -1 ) {
-			if ( speeds[curSpeedIndex + direction] ) {
-				setSpeed(speeds[curSpeedIndex + direction]);
-			}
-		}
-		else {
-			var candidates = speeds.filter(function(speed) {
-				return direction > 0 ? (speed > curSpeed) : (speed < curSpeed);
-			});
-			if ( candidates.length ) {
-				var newSpeed = direction > 0 ? candidates[0] : candidates[candidates.length-1];
-				setSpeed(newSpeed);
-			}
-		}
-	};
-
+	
+	var $button = createXButton($box, function(e) {});
+	
 	return $box;
 }
 
@@ -133,9 +68,6 @@ if ( $player ) {
 				var $buttons = $player.querySelector('.controls-wrapper .sidedock');
 
 				if ( $buttons ) {
-					var $box = createRepeatButton(video);
-					$buttons.appendChild($box);
-
 					var $box = createSpeedButton(video);
 					$buttons.appendChild($box);
 				}
