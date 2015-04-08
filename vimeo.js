@@ -93,7 +93,7 @@ function createSpeedButton(video) {
 		}
 	});
 	$button.onmousewheel = function(e) {
-		var speeds = [0.2, 0.3333, 0.5, 0.6666, 1, 1.25, 1.5, 2, 2.5, 3, 4];
+		var speeds = [0.5, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
 
 		e.preventDefault();
 
@@ -121,24 +121,24 @@ function createSpeedButton(video) {
 	return $box;
 }
 
-
-
 var $player = document.querySelector('div.player');
 
 if ( $player ) {
-
 	var mo = new MutationObserver(function(muts) {
 		setTimeout(function() {
 			var video = $player.querySelector('video');
+			
+			// Verify this is a vimeo-based video (embedded or otherwise)
+			if (video.src.indexOf('vimeo') > -1) {
+				var $buttons = $player.querySelector('.controls-wrapper .sidedock');
 
-			var $buttons = $player.querySelector('.controls-wrapper .sidedock');
+				if ( $buttons ) {
+					var $box = createRepeatButton(video);
+					$buttons.appendChild($box);
 
-			if ( $buttons ) {
-				var $box = createRepeatButton(video);
-				$buttons.appendChild($box);
-
-				var $box = createSpeedButton(video);
-				$buttons.appendChild($box);
+					var $box = createSpeedButton(video);
+					$buttons.appendChild($box);
+				}
 			}
 		}, 1);
 	});
